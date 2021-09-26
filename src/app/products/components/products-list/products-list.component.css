@@ -1,0 +1,8 @@
+h2, p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+img {
+    object-fit: contain;
+}

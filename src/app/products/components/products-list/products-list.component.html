@@ -1,0 +1,48 @@
+<div class="flex flex-row flex-wrap card-container blue-container justify-content-center">
+    <p-card *ngFor="let product of products; trackBy:trackById" [style]="{'width': '25rem', 'margin': '20px', 'height': '450px'}">
+        <ng-template pTemplate="header">
+            <img src="{{product?.imageURL}}" style="height: 200px; width: 100%;">
+        </ng-template>
+
+        <h2 style="height: 70px; margin-top: -25px;" pTooltip="{{ product?.name }}" tooltipPosition="bottom">{{ product?.name }}</h2>
+        <p style="height: 60px; font-weight: bold;" pTooltip="{{ product?.description }}" tooltipPosition="bottom">{{ product?.description }}</p>
+
+        <div class="flex flex-row flex-wrap justify-content-end">
+            <button pButton type="button" label="Details" class="p-button-secondary" (click)="showProductUpdateDialog(product)"></button>
+        </div>
+    </p-card> 
+</div>
+
+<!-- product edit dialog -->
+<p-dialog header="Edit Product" [(visible)]="displayEditProduct" [contentStyle]="{'overflow': 'visible'}" [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [style]="{width: '50vw'}">
+    <div class="card" *ngIf="displayEditProduct" [formGroup]="productForm" >
+        <div class="field">
+            <label for="name">Name</label>
+            <input id="name" type="text" class="inputfield w-full" pInputText formControlName="name">
+            <!-- Validation -->
+            <div *ngIf="productName.invalid && (productName.dirty || productName.touched)" class="flex flex-column flex-wrap mt-2">     
+                <div *ngIf="productName.errors?.required" class="flex">
+                    <p-message severity="error" text="Product Name is required."></p-message>
+                </div>
+            </div>
+        </div>
+        <div class="field">
+            <label for="imageURL">Image URL</label>
+            <input id="imageURL" type="text" class="inputfield w-full" pInputText formControlName="imageURL">
+        </div>
+        <div class="field">
+            <label for="dateOfBirth">Description</label>
+            <input id="dateOfBirth" type="text" class="inputfield w-full" pInputText formControlName="description">
+        </div>
+        <div class="flex justify-content-center flex-wrap field">
+            <button pButton type="button" 
+                class="flex align-items-center justify-content-center p-button-raised p-button-rounded"
+                (click)="updateProduct()" [disabled]="productForm.invalid || !productName.dirty || !productName.touched">
+                Update Product Info
+            </button>
+        </div>
+    </div>
+</p-dialog>
+
+<p-toast key="product" position="top-center"></p-toast>
+
